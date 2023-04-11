@@ -5,19 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User implements Serializable {
-    private boolean newUser;
-    private long userId;
+
     private String userName;
     private String lastName;
-    private long chatId;
+    private String chatId;
     private BankType bankType;
     private int countSymbolsAfterDot;
     private List<OperationType> operationTypes = new ArrayList<>();
     private String notificationTime;
 
-    public User(boolean newUser, long userId, String userName, String lastName, long chatId, BankType bankType, int countSymbolsAfterDot, List<OperationType> operationTypes, String notificationTime) {
-        this.newUser = newUser;
-        this.userId = userId;
+    public User(String userName, String lastName, String chatId, BankType bankType, int countSymbolsAfterDot, List<OperationType> operationTypes, String notificationTime) {
         this.userName = userName;
         this.lastName = lastName;
         this.chatId = chatId;
@@ -25,22 +22,6 @@ public class User implements Serializable {
         this.countSymbolsAfterDot = countSymbolsAfterDot;
         this.operationTypes = operationTypes;
         this.notificationTime = notificationTime;
-    }
-
-    public boolean isNewUser() {
-        return newUser;
-    }
-
-    public void setNewUser(boolean newUser) {
-        this.newUser = newUser;
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
     }
 
     public String getUserName() {
@@ -59,11 +40,11 @@ public class User implements Serializable {
         this.lastName = lastName;
     }
 
-    public long getChatId() {
+    public String getChatId() {
         return chatId;
     }
 
-    public void setChatId(long chatId) {
+    public void setChatId(String chatId) {
         this.chatId = chatId;
     }
 
