@@ -13,10 +13,12 @@ public class TelegramBot extends TelegramLongPollingBot {
     public TelegramBot(BotConfig config){
         this.config = config;
     }
+
     @Override
     public String getBotUsername() {
         return config.getBotName();
     }
+
     @Override
     public String getBotToken() {
         return config.getToken();
@@ -24,6 +26,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
@@ -36,11 +39,13 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         }
     }
+
     private void startCommandReceived(long chatId, String name){
 
         String answer = "Hi, "+ name+", nice to meet you! I'm working";
         sendMessage(chatId, answer);
     }
+    
     private void sendMessage(long chatId, String textToSend){
 
         SendMessage message = new SendMessage();
