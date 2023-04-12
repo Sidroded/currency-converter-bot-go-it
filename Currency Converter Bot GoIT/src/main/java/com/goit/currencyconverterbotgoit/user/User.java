@@ -1,4 +1,4 @@
-package com.goit.currencyconverterbotgoit.users;
+package com.goit.currencyconverterbotgoit.user;
 
 import java.io.Serializable;
 import java.util.ArrayList;

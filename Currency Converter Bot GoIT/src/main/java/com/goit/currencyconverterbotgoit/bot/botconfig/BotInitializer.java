@@ -1,4 +1,4 @@
-package com.goit.currencyconverterbotgoit.botconfig;
+package com.goit.currencyconverterbotgoit.bot.botconfig;
 
 import com.goit.currencyconverterbotgoit.bot.TelegramBot;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,6 @@ public class BotInitializer {
         try {
             telegramBotsApi.registerBot(bot);
         }
-        catch (TelegramApiException e){
-
-        }
+        catch (TelegramApiException ignored){}
     }
 }

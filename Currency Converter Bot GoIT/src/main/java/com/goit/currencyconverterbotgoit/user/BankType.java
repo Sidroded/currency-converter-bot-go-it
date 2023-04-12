@@ -1,4 +1,4 @@
-package com.goit.currencyconverterbotgoit.users;
+package com.goit.currencyconverterbotgoit.user;
 
 public enum BankType {
     PRIVAT_BANK("ПриватБанк"),

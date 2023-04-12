@@ -1,4 +1,4 @@
-package com.goit.currencyconverterbotgoit.botconfig;
+package com.goit.currencyconverterbotgoit.bot.botconfig;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;

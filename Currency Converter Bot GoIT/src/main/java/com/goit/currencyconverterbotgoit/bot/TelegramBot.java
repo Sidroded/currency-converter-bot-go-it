@@ -1,6 +1,8 @@
 package com.goit.currencyconverterbotgoit.bot;
 
-import com.goit.currencyconverterbotgoit.botconfig.BotConfig;
+import com.goit.currencyconverterbotgoit.bot.botconfig.BotConfig;
+import com.goit.currencyconverterbotgoit.command.StartCommand;
+import com.goit.currencyconverterbotgoit.user.User;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -29,33 +31,43 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
-            long chatId = update.getMessage().getChatId();
-            switch (messageText){
-                case "/start":
-                    startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
-                    break;
-                default:
-                    sendMessage(chatId, "Sorry, command was not recognized");
+            String chatId = String.valueOf(update.getMessage().getChatId());
+            String userName = update.getMessage().getChat().getFirstName();
+
+            switch (messageText) {
+                case "/start" -> startCommandReceived(chatId, userName);
+
+                default -> sendMessage(chatId, "Sorry, command was not recognized");
+            }
+        } else if (update.hasCallbackQuery()) {
+            String callBackData = update.getCallbackQuery().getData();
+            int messageId = update.getCallbackQuery().getMessage().getMessageId();
+            String chatId = String.valueOf(update.getCallbackQuery().getMessage().getChatId());
+
+            switch (callBackData) {
+
             }
         }
     }
 
-    private void startCommandReceived(long chatId, String name){
+    private void startCommandReceived(String chatId, String name){
+        User user = StartCommand.initializeUser(chatId, name);
 
-        String answer = "Hi, "+ name+", nice to meet you! I'm working";
-        sendMessage(chatId, answer);
+        try {
+            execute(StartCommand.getMessage(user));
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
     }
     
-    private void sendMessage(long chatId, String textToSend){
-
+    private void sendMessage(String chatId, String text){
         SendMessage message = new SendMessage();
-        message.setChatId(String.valueOf(chatId));
-        message.setText(textToSend);
+        message.setChatId(chatId);
+        message.setText(text);
 
         try{
             execute(message);
         }
-        catch(TelegramApiException e){
-        }
+        catch(TelegramApiException ignored){}
     }
 }
