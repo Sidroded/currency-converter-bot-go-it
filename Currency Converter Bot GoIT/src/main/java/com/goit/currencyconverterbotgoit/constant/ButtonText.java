@@ -4,6 +4,7 @@ public class ButtonText {
 
     public static final String GET_INFO_BUTTON_TEXT = "Отримати інфо";
     public static final String SETTINGS_BUTTON_TEXT = "Налаштування";
+    public static final String TEST_BUTTON_TEXT = "TEST BUTTON";
 
     public static final String DIGITS_AFTER_DECIMAL_BUTTON_TEXT = "Кількість знаків після коми";
     public static final String TWO_DIGITS_BUTTON_TEXT = "2";
