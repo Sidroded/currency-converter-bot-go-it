@@ -2,6 +2,7 @@ package com.goit.currencyconverterbotgoit.bot;
 
 import com.goit.currencyconverterbotgoit.bot.botconfig.BotConfig;
 import com.goit.currencyconverterbotgoit.command.StartCommand;
+import com.goit.currencyconverterbotgoit.constant.ButtonId;
 import com.goit.currencyconverterbotgoit.user.User;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -44,8 +45,8 @@ public class TelegramBot extends TelegramLongPollingBot {
             int messageId = update.getCallbackQuery().getMessage().getMessageId();
             String chatId = String.valueOf(update.getCallbackQuery().getMessage().getChatId());
 
-            switch (callBackData) {
-
+            switch (ButtonId.valueOf(callBackData)) {
+                case TEST_BUTTON -> testCommandReceived(chatId, messageId);
             }
         }
     }
@@ -58,6 +59,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void testCommandReceived(String chatId, int messageId) {
+        
     }
     
     private void sendMessage(String chatId, String text){
