@@ -9,16 +9,16 @@ public class User implements Serializable {
     private String userName;
     private String lastName;
     private String chatId;
-    private BankType bankType;
+    private List<BankType> bankTypes = new ArrayList<>();
     private int countSymbolsAfterDot;
     private List<OperationType> operationTypes = new ArrayList<>();
     private String notificationTime;
 
-    public User(String userName, String lastName, String chatId, BankType bankType, int countSymbolsAfterDot, List<OperationType> operationTypes, String notificationTime) {
+    public User(String userName, String lastName, String chatId, List<BankType> bankTypes, int countSymbolsAfterDot, List<OperationType> operationTypes, String notificationTime) {
         this.userName = userName;
         this.lastName = lastName;
         this.chatId = chatId;
-        this.bankType = bankType;
+        this.bankTypes = bankTypes;
         this.countSymbolsAfterDot = countSymbolsAfterDot;
         this.operationTypes = operationTypes;
         this.notificationTime = notificationTime;
@@ -48,12 +48,12 @@ public class User implements Serializable {
         this.chatId = chatId;
     }
 
-    public BankType getBankType() {
-        return bankType;
+    public List<BankType> getBankTypes() {
+        return bankTypes;
     }
 
-    public void setBankType(BankType bankType) {
-        this.bankType = bankType;
+    public void setBankTypes(List<BankType> bankTypes) {
+        this.bankTypes = bankTypes;
     }
 
     public int getCountSymbolsAfterDot() {

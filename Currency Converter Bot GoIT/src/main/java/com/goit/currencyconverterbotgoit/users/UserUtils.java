@@ -11,7 +11,7 @@ public class UserUtils {
         OperationType operationType = OperationType.USD_TO_UAH;
         String notificationTime = null;
 
-        User user = new User(userName, lastName, chatId, bankType, countSymbolsAfterDot, List.of(operationType), notificationTime);
+        User user = new User(userName, lastName, chatId, List.of(bankType), countSymbolsAfterDot, List.of(operationType), notificationTime);
 
         return user;
     }
