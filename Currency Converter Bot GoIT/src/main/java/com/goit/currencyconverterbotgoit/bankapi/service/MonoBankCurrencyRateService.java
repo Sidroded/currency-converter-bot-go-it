@@ -33,8 +33,8 @@ public class MonoBankCurrencyRateService implements CurrencyRateApiService {
                         && codes.contains(dto.getCurrencyCodeB()))
                 .map(dto -> {
                     RateResponse rate = new RateResponse();
-                    rate.setCurrencyTo(Currency.fromCode(dto.getCurrencyCodeB()));
-                    rate.setCurrencyFrom(Currency.fromCode(dto.getCurrencyCodeA()));
+                    rate.setCurrencyTo(Currency.fromCode(dto.getCurrencyCodeA()));
+                    rate.setCurrencyFrom(Currency.fromCode(dto.getCurrencyCodeB()));
                     rate.setRateBuy(dto.getRateBuy());
                     rate.setRateSell(dto.getRateSell());
                     return rate;
