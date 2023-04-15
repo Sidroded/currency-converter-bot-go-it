@@ -6,10 +6,14 @@ import com.goit.currencyconverterbotgoit.bankapi.RateResponse;
 import com.goit.currencyconverterbotgoit.bankapi.service.MonoBankCurrencyRateService;
 import com.goit.currencyconverterbotgoit.bankapi.service.NationalBankCurrencyRateService;
 import com.goit.currencyconverterbotgoit.bankapi.service.PrivatBankCurrencyRateService;
+import com.goit.currencyconverterbotgoit.constant.ButtonId;
+import com.goit.currencyconverterbotgoit.constant.ButtonText;
 import com.goit.currencyconverterbotgoit.user.BankType;
 import com.goit.currencyconverterbotgoit.user.OperationType;
 import com.goit.currencyconverterbotgoit.user.User;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.List;
 import java.util.Map;
@@ -17,9 +21,27 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GetInfoCommand {
-    public SendMessage getMessage(User user) {
+
+    public static SendMessage getMessage(User user) {
         SendMessage message = new SendMessage();
         message.setChatId(user.getChatId());
+        message.setText(buildMessage(user));
+
+        InlineKeyboardButton sendInfoButton = new InlineKeyboardButton();
+        sendInfoButton.setText(ButtonText.GET_INFO_BUTTON_TEXT);
+        sendInfoButton.setCallbackData(ButtonId.GET_INFO_BUTTON.getId());
+
+        InlineKeyboardButton settingsButton = new InlineKeyboardButton();
+        settingsButton.setText(ButtonText.SETTINGS_BUTTON_TEXT);
+        settingsButton.setCallbackData(ButtonId.SETTINGS_BUTTON.getId());
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        inlineKeyboardMarkup.setKeyboard(List.of(List.of(sendInfoButton), List.of(settingsButton)));
+        message.setReplyMarkup(inlineKeyboardMarkup);
+        return message;
+    }
+
+    private static String buildMessage(User user) {
         StringBuilder rateMessageBuilder = new StringBuilder();
         for (BankType bankType : user.getBankTypes()) {
             CurrencyRateApiService apiService = getCurrencyRateApiService(bankType);
@@ -30,12 +52,12 @@ public class GetInfoCommand {
                 rateMessageBuilder.append(formatMessage(rateResponse, bankType, user.getCountSymbolsAfterDot()))
                         .append("\n");
             }
+            rateMessageBuilder.append("\n");
         }
-        message.setText(rateMessageBuilder.toString());
-        return message;
+        return rateMessageBuilder.toString();
     }
 
-    private String formatMessage(RateResponse rateResponse, BankType bankType, int countSymbolsAfterDot) {
+    private static String formatMessage(RateResponse rateResponse, BankType bankType, int countSymbolsAfterDot) {
         String format = "Курс в %s: %s/%s\n" +
                 "Купівля: %." + countSymbolsAfterDot + "f\n" +
                 "Продаж: %." + countSymbolsAfterDot + "f";
@@ -49,7 +71,7 @@ public class GetInfoCommand {
         );
     }
 
-    private CurrencyRateApiService getCurrencyRateApiService(BankType bankType) {
+    private static CurrencyRateApiService getCurrencyRateApiService(BankType bankType) {
         switch (bankType) {
             case PRIVAT_BANK:
                 return new PrivatBankCurrencyRateService();
@@ -61,7 +83,7 @@ public class GetInfoCommand {
         throw new IllegalArgumentException("Not supported bank type!");
     }
 
-    private Map<OperationType, RateResponse> buildRateResponseByOperationTypeMap(List<RateResponse> rateResponses) {
+    private static Map<OperationType, RateResponse> buildRateResponseByOperationTypeMap(List<RateResponse> rateResponses) {
         return rateResponses.stream()
                 .flatMap(rateResponse -> {
                     OperationType operationType = findOperationTypeByCurrencies(rateResponse.getCurrencyFrom(), rateResponse.getCurrencyTo());
@@ -70,15 +92,15 @@ public class GetInfoCommand {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    private RateResponse getRateResponseByOperationType(OperationType operationType,
-                                                        Map<OperationType, RateResponse> rateResponseByOperationType) {
+    private static RateResponse getRateResponseByOperationType(OperationType operationType,
+                                                               Map<OperationType, RateResponse> rateResponseByOperationType) {
         return rateResponseByOperationType.computeIfAbsent(operationType, ot -> {
             OperationType reverseOperationType = findOperationTypeByCurrencies(ot.getTo(), ot.getFrom());
             return constructReverseRateResponse(rateResponseByOperationType.get(reverseOperationType));
         });
     }
 
-    private RateResponse constructReverseRateResponse(RateResponse rateResponse) {
+    private static RateResponse constructReverseRateResponse(RateResponse rateResponse) {
         RateResponse reverseRateResponse = new RateResponse();
         reverseRateResponse.setRateBuy(rateResponse.getRateSell());
         reverseRateResponse.setRateSell(rateResponse.getRateBuy());
@@ -87,7 +109,7 @@ public class GetInfoCommand {
         return reverseRateResponse;
     }
 
-    private OperationType findOperationTypeByCurrencies(Currency from, Currency to) {
+    private static OperationType findOperationTypeByCurrencies(Currency from, Currency to) {
         for (OperationType operationType : OperationType.values()) {
             if (operationType.getFrom() == from && operationType.getTo() == to) {
                 return operationType;
