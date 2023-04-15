@@ -21,14 +21,14 @@ public class SettingsCommand {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         List<InlineKeyboardButton> rowInLine = new ArrayList<>();
 
-        InlineKeyboardButton chooseDigitsButton = new InlineKeyboardButton();
+        var chooseDigitsButton = new InlineKeyboardButton();
         chooseDigitsButton.setText(ButtonText.DIGITS_AFTER_DECIMAL_BUTTON_TEXT);
         chooseDigitsButton.setCallbackData(ButtonId.CHOOSE_DIGITS_AFTER_DECIMAL_BUTTON.getId());
         rowInLine.add(chooseDigitsButton);
         keyboard.add(rowInLine);
         rowInLine = new ArrayList<>();
 
-        InlineKeyboardButton chooseBankButton = new InlineKeyboardButton();
+        var chooseBankButton = new InlineKeyboardButton();
         chooseBankButton.setText(ButtonText.BANK_BUTTON_TEXT);
         chooseDigitsButton.setCallbackData(ButtonId.CHOOSE_BANK_BUTTON.getId());
         rowInLine.add(chooseBankButton);
@@ -36,7 +36,7 @@ public class SettingsCommand {
         rowInLine = new ArrayList<>();
 
 
-        InlineKeyboardButton chooseCurrencyButton = new InlineKeyboardButton();
+        var chooseCurrencyButton = new InlineKeyboardButton();
         chooseCurrencyButton.setText(ButtonText.CURRENCY_BUTTON_TEXT);
         chooseCurrencyButton.setCallbackData(ButtonId.CHOOSE_CURRENCY_BUTTON.getId());
         rowInLine.add(chooseCurrencyButton);
@@ -44,7 +44,7 @@ public class SettingsCommand {
         rowInLine = new ArrayList<>();
 
 
-        InlineKeyboardButton chooseNotificationTimeButton = new InlineKeyboardButton();
+        var chooseNotificationTimeButton = new InlineKeyboardButton();
         chooseNotificationTimeButton.setText(ButtonText.NOTIFICATIONS_TIME_BUTTON_TEXT);
         chooseNotificationTimeButton.setCallbackData(ButtonId.CHOOSE_NOTIFICATIONS_TIME_BUTTON.getId());
         rowInLine.add(chooseNotificationTimeButton);
