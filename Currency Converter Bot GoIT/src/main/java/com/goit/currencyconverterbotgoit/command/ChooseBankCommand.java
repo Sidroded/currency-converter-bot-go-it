@@ -6,6 +6,7 @@ import com.goit.currencyconverterbotgoit.constant.MessageText;
 import com.goit.currencyconverterbotgoit.emoji.Emoji;
 import com.goit.currencyconverterbotgoit.user.BankType;
 import com.goit.currencyconverterbotgoit.user.User;
+import com.goit.currencyconverterbotgoit.user.UserService;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -46,7 +47,7 @@ public class ChooseBankCommand {
 
         keyboardMarkup.setKeyboard(keyboard);
         message.setReplyMarkup(keyboardMarkup);
-        
+
         return message;
     }
 
@@ -58,4 +59,21 @@ public class ChooseBankCommand {
         }
         return Emoji.NOT;
     }
+
+    public static User getEditUser(User user, BankType bankType){
+        List<BankType> banksOfUserModified = user.getBankTypes();
+        for (BankType bankUser : banksOfUserModified){
+            if(bankUser.equals(bankType) && banksOfUserModified.size() > 1){
+                banksOfUserModified.remove(bankUser);
+            } else if (!bankUser.equals(bankType)) {
+                banksOfUserModified.add(bankType);
+            }
+        }
+        user.setBankTypes(banksOfUserModified);
+        UserService.addUser(user);
+
+        return user;
+    }
+
+
 }
