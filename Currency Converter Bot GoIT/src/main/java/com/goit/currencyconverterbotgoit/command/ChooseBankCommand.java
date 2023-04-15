@@ -40,22 +40,22 @@ public class ChooseBankCommand {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         List<InlineKeyboardButton> rowInLine = new ArrayList<>();
 
-        InlineKeyboardButton monoBankButton = new InlineKeyboardButton();
-        monoBankButton.setText(ButtonText.MONOBANK_BUTTON_TEXT + getEmoji(BankType.MONO_BANK,user));
+        var monoBankButton = new InlineKeyboardButton();
+        monoBankButton.setText(ButtonText.MONOBANK_BUTTON_TEXT + getEmoji(BankType.MONO_BANK,user).get());
         monoBankButton.setCallbackData(ButtonId.MONOBANK_BUTTON.getId());
         rowInLine.add(monoBankButton);
         keyboard.add(rowInLine);
         rowInLine = new ArrayList<>();
 
-        InlineKeyboardButton privatBankButton = new InlineKeyboardButton();
-        privatBankButton.setText(ButtonText.PRIVATBANK_BUTTON_TEXT + getEmoji(BankType.PRIVAT_BANK,user));
+        var privatBankButton = new InlineKeyboardButton();
+        privatBankButton.setText(ButtonText.PRIVATBANK_BUTTON_TEXT + getEmoji(BankType.PRIVAT_BANK,user).get());
         privatBankButton.setCallbackData(ButtonId.PRIVATBANK_BUTTON.getId());
         rowInLine.add(privatBankButton);
         keyboard.add(rowInLine);
         rowInLine = new ArrayList<>();
 
-        InlineKeyboardButton nbuBankButton = new InlineKeyboardButton();
-        nbuBankButton.setText(ButtonText.NBU_BUTTON_TEXT + getEmoji(BankType.NATIONAL_BANK,user));
+        var nbuBankButton = new InlineKeyboardButton();
+        nbuBankButton.setText(ButtonText.NBU_BUTTON_TEXT + getEmoji(BankType.NATIONAL_BANK,user).get());
         nbuBankButton.setCallbackData(ButtonId.NBU_BUTTON.getId());
         rowInLine.add(nbuBankButton);
         keyboard.add(rowInLine);
@@ -80,10 +80,10 @@ public class ChooseBankCommand {
         return user;
     }
 
-    public static EditMessageText getEditMessage(User user, String messageId){
+    public static EditMessageText getEditMessage(User user, int messageId){
         EditMessageText editMessage = new EditMessageText();
         editMessage.setChatId(user.getChatId());
-        editMessage.setMessageId(Integer.valueOf(messageId));
+        editMessage.setMessageId(messageId);
 
         InlineKeyboardMarkup keyboardMarkup = setInclineKeyboardMarkupOfBank(user);
         editMessage.setReplyMarkup(keyboardMarkup);
