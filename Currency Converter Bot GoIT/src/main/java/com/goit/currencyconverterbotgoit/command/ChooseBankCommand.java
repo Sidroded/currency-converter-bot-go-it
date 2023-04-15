@@ -8,6 +8,7 @@ import com.goit.currencyconverterbotgoit.user.BankType;
 import com.goit.currencyconverterbotgoit.user.User;
 import com.goit.currencyconverterbotgoit.user.UserService;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -20,6 +21,21 @@ public class ChooseBankCommand {
         message.setChatId(user.getChatId());
         message.setText(MessageText.CHOOSE_BANK_TEXT);
 
+        InlineKeyboardMarkup inlineKeyboardMarkup = setInclineKeyboardMarkupOfBank(user);
+        message.setReplyMarkup(inlineKeyboardMarkup);
+
+        return message;
+    }
+
+    private static Emoji getEmoji(BankType bankType, User user){
+        for(BankType bankUser: user.getBankTypes()){
+            if(bankType.equals(bankUser)){
+                return Emoji.CHECK;
+            }
+        }
+        return Emoji.NOT;
+    }
+    private static InlineKeyboardMarkup setInclineKeyboardMarkupOfBank(User user){
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         List<InlineKeyboardButton> rowInLine = new ArrayList<>();
@@ -46,18 +62,7 @@ public class ChooseBankCommand {
 
 
         keyboardMarkup.setKeyboard(keyboard);
-        message.setReplyMarkup(keyboardMarkup);
-
-        return message;
-    }
-
-    private static Emoji getEmoji(BankType bankType, User user){
-        for(BankType bankUser: user.getBankTypes()){
-            if(bankType.equals(bankUser)){
-                return Emoji.CHECK;
-            }
-        }
-        return Emoji.NOT;
+        return keyboardMarkup;
     }
 
     public static User getEditUser(User user, BankType bankType){
@@ -73,6 +78,18 @@ public class ChooseBankCommand {
         UserService.addUser(user);
 
         return user;
+    }
+
+    public static EditMessageText getEditMessage(User user, String messageId){
+        EditMessageText editMessage = new EditMessageText();
+        editMessage.setChatId(user.getChatId());
+        editMessage.setMessageId(Integer.valueOf(messageId));
+
+        InlineKeyboardMarkup keyboardMarkup = setInclineKeyboardMarkupOfBank(user);
+        editMessage.setReplyMarkup(keyboardMarkup);
+
+        return editMessage;
+
     }
 
 
