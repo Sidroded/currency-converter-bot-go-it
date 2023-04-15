@@ -30,7 +30,7 @@ public class SettingsCommand {
 
         var chooseBankButton = new InlineKeyboardButton();
         chooseBankButton.setText(ButtonText.BANK_BUTTON_TEXT);
-        chooseDigitsButton.setCallbackData(ButtonId.CHOOSE_BANK_BUTTON.getId());
+        chooseBankButton.setCallbackData(ButtonId.CHOOSE_BANK_BUTTON.getId());
         rowInLine.add(chooseBankButton);
         keyboard.add(rowInLine);
         rowInLine = new ArrayList<>();
@@ -49,6 +49,7 @@ public class SettingsCommand {
         chooseNotificationTimeButton.setCallbackData(ButtonId.CHOOSE_NOTIFICATIONS_TIME_BUTTON.getId());
         rowInLine.add(chooseNotificationTimeButton);
         keyboard.add(rowInLine);
+
 
         keyboardMarkup.setKeyboard(keyboard);
         message.setReplyMarkup(keyboardMarkup);
