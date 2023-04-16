@@ -28,12 +28,12 @@ public class ChooseBankCommand {
     }
 
     private static Emoji getEmoji(BankType bankType, User user){
-        for(BankType bankUser: user.getBankTypes()){
-            if(bankType.equals(bankUser)){
-                return Emoji.CHECK;
-            }
+        if(user.getBankTypes().contains(bankType)){
+            return Emoji.CHECK;
         }
-        return Emoji.NOT;
+        else{
+            return Emoji.NOT;
+        }
     }
     private static InlineKeyboardMarkup setInclineKeyboardMarkupOfBank(User user){
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
@@ -66,15 +66,14 @@ public class ChooseBankCommand {
     }
 
     public static User getEditUser(User user, BankType bankType){
-        List<BankType> banksOfUserModified = user.getBankTypes();
-        for (BankType bankUser : banksOfUserModified){
-            if(bankUser.equals(bankType) && banksOfUserModified.size() > 1){
-                banksOfUserModified.remove(bankUser);
-            } else if (!bankUser.equals(bankType)) {
-                banksOfUserModified.add(bankType);
-            }
+        List<BankType> banksOfUserModified = new ArrayList<>(user.getBankTypes());
+        if(banksOfUserModified.contains(bankType) && banksOfUserModified.size() > 1 ){
+            banksOfUserModified.remove(bankType);
+        } else if (!banksOfUserModified.contains(bankType)) {
+            banksOfUserModified.add(bankType);
         }
         user.setBankTypes(banksOfUserModified);
+
         UserService.addUser(user);
 
         return user;
