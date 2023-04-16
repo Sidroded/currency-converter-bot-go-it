@@ -50,7 +50,6 @@ public class GetInfoCommand {
                     rateResponse.ifPresent(response -> rateMessageBuilder.append(formatMessage(response, bankType, user.getCountSymbolsAfterDot()))
                             .append("\n"));
                 }
-                rateMessageBuilder.append("\n");
             } else {
                 LOGGER.warning("No currency rate data!");
             }
