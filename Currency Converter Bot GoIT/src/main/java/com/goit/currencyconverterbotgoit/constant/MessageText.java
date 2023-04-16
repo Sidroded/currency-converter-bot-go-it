@@ -11,5 +11,8 @@ public class MessageText {
     public static final String CHOOSE_CURRENCY_TEXT  = "Оберіть валюту";
 
     public static final String CHOOSE_NOTIFICATIONS_TIME_TEXT  = "Оберіть час сповіщень";
+    public static final String ENABLED_NOTIFICATIONS_TIME_TEXT  ="Сповіщення встановлено на %s";
+    public static final String DISABLED_NOTIFICATIONS_TIME_TEXT  = "Сповіщення вимкнено";
+
 
 }
