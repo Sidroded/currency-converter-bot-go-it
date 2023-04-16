@@ -146,6 +146,7 @@ public class ChooseNotificationTimeCommand {
 
         if(userHasNotifications(user)){
             row.add(disableButton);
+            keyboard.add(row);
             row = new ArrayList<>();
             row.add(settingsTimeButton);
         }
