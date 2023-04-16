@@ -12,6 +12,8 @@ public class MessageText {
 
     public static final String CHANGE_NOTIFICATIONS_TIME_TEXT  = "Надішліть час сповіщень у форматі HH:MM";
     public static final String ENABLED_NOTIFICATIONS_TIME_TEXT  ="Сповіщення встановлено на %s";
+
+    public static final String DEFAULT_NOTIFICATIONS_TIME_TEXT  = "Ви надіслали текст не у заданному форматі";
     public static final String DISABLED_NOTIFICATIONS_TIME_TEXT  = "Сповіщення вимкнено";
 
 

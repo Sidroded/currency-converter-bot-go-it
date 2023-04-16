@@ -62,6 +62,14 @@ public class ChooseNotificationTimeCommand {
         return infoMessage;
     }
 
+    public static SendMessage getDefaultMessage(User user){
+        SendMessage infoMessage = new SendMessage();
+        infoMessage.setChatId(user.getChatId());
+        infoMessage.setText(MessageText.DEFAULT_NOTIFICATIONS_TIME_TEXT);
+
+        return infoMessage;
+    }
+
     public static EditMessageText editMessage(User user, int messageId){
         EditMessageText editMessage = new EditMessageText();
         editMessage.setChatId(user.getChatId());
