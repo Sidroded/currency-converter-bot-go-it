@@ -20,8 +20,8 @@ public class ChooseNotificationTimeCommand {
     //мапа із сhatId та boolean щоб відслідковувати момент що наразі ми чекаємо повідомлення
     private static Map<String, Boolean> waitingNotificationMap = new HashMap<>();
 
-    public static Map<String, Boolean> getMap() {
-        return waitingNotificationMap;
+    public static boolean getMap(String chatId) {
+        return waitingNotificationMap.get(chatId);
     }
 
 
@@ -33,10 +33,10 @@ public class ChooseNotificationTimeCommand {
         message.setChatId(user.getChatId());
 
         if(userHasNotifications(user)){
-            message.setText(MessageText.DISABLED_NOTIFICATIONS_TIME_TEXT);
+            message.setText(String.format(MessageText.ENABLED_NOTIFICATIONS_TIME_TEXT,user.getNotificationTime()));
         }
         else{
-            message.setText(MessageText.ENABLED_NOTIFICATIONS_TIME_TEXT);
+            message.setText(MessageText.DISABLED_NOTIFICATIONS_TIME_TEXT);
         }
 
         InlineKeyboardMarkup inlineKeyboardMarkup = getInclineKeyboardMarkup(user);
@@ -51,6 +51,8 @@ public class ChooseNotificationTimeCommand {
         infoMessage.setChatId(user.getChatId());
         infoMessage.setText(MessageText.CHANGE_NOTIFICATIONS_TIME_TEXT);
 
+        waitingNotificationMap.put(user.getChatId(),true);
+
         return infoMessage;
     }
 
@@ -58,6 +60,8 @@ public class ChooseNotificationTimeCommand {
         SendMessage infoMessage = new SendMessage();
         infoMessage.setChatId(user.getChatId());
         infoMessage.setText(MessageText.ENABLED_NOTIFICATIONS_TIME_TEXT);
+
+        waitingNotificationMap.put(user.getChatId(),false);
 
         return infoMessage;
     }
@@ -76,10 +80,10 @@ public class ChooseNotificationTimeCommand {
         editMessage.setMessageId(messageId);
 
         if(userHasNotifications(user)){
-            editMessage.setText(MessageText.DISABLED_NOTIFICATIONS_TIME_TEXT);
+            editMessage.setText(String.format(MessageText.ENABLED_NOTIFICATIONS_TIME_TEXT,user.getNotificationTime()));
         }
         else{
-            editMessage.setText(MessageText.ENABLED_NOTIFICATIONS_TIME_TEXT);
+            editMessage.setText(MessageText.DISABLED_NOTIFICATIONS_TIME_TEXT);
         }
 
         InlineKeyboardMarkup inlineKeyboardMarkup = getInclineKeyboardMarkup(user);
