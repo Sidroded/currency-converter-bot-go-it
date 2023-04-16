@@ -6,40 +6,39 @@ import com.goit.currencyconverterbotgoit.constant.MessageText;
 import com.goit.currencyconverterbotgoit.user.User;
 import com.goit.currencyconverterbotgoit.user.UserService;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ChooseNotificationTimeCommand {
+
+    //мапа із сhatId та boolean щоб відслідковувати момент що наразі ми чекаємо повідомлення
+    private static Map<String, Boolean> waitingNotificationMap = new HashMap<>();
+
+    public static Map<String, Boolean> getMap() {
+        return waitingNotificationMap;
+    }
+
 
     public static SendMessage getMessage(User user){
         SendMessage message = new SendMessage();
         message.setChatId(user.getChatId());
 
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        List<InlineKeyboardButton> row = new ArrayList<>();
-
-        InlineKeyboardButton enableButton = new InlineKeyboardButton();
-        enableButton.setText(ButtonText.ENABLE_NOTIFICATIONS_TIME_BUTTON_TEXT);
-        enableButton.setCallbackData(ButtonId.ENABLE_NOTIFICATIONS_TIME_BUTTON.getId());
-
-        InlineKeyboardButton disableButton = new InlineKeyboardButton();
-        disableButton.setText(ButtonText.DISABLE_NOTIFICATIONS_TIME_BUTTON_TEXT);
-        disableButton.setCallbackData(ButtonId.DISABLE_NOTIFICATIONS_TIME_BUTTON.getId());
-
-        if(user.getNotificationTime() == null){
+        if(userHasNotifications(user)){
             message.setText(MessageText.DISABLED_NOTIFICATIONS_TIME_TEXT);
-            row.add(enableButton);
         }
         else{
             message.setText(MessageText.ENABLED_NOTIFICATIONS_TIME_TEXT);
-            row.add(disableButton);
         }
-        keyboard.add(row);
-        inlineKeyboardMarkup.setKeyboard(keyboard);
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = getInclineKeyboardMarkup(user);
+
+        message.setReplyMarkup(inlineKeyboardMarkup);
 
         return message;
     }
@@ -57,5 +56,85 @@ public class ChooseNotificationTimeCommand {
     public static void changeNotificationTimeOfUserToNull(User user){
         user.setNotificationTime(null);
         UserService.addUser(user);
+    }
+
+    private static InlineKeyboardButton getEnabledButton(){
+        InlineKeyboardButton enableButton = new InlineKeyboardButton();
+        enableButton.setText(ButtonText.ENABLE_NOTIFICATIONS_TIME_BUTTON_TEXT);
+        enableButton.setCallbackData(ButtonId.ENABLE_NOTIFICATIONS_TIME_BUTTON.getId());
+        return enableButton;
+    }
+    private static InlineKeyboardButton getDisabledButton(){
+        InlineKeyboardButton disableButton = new InlineKeyboardButton();
+        disableButton.setText(ButtonText.DISABLE_NOTIFICATIONS_TIME_BUTTON_TEXT);
+        disableButton.setCallbackData(ButtonId.DISABLE_NOTIFICATIONS_TIME_BUTTON.getId());
+        return disableButton;
+    }
+
+    private static InlineKeyboardButton getSettingsTimeButton(){
+        InlineKeyboardButton settingsTimeButton = new InlineKeyboardButton();
+        settingsTimeButton.setText(ButtonText.CHANGE_NOTIFICATIONS_TIME_BUTTON_TEXT);
+        settingsTimeButton.setCallbackData(ButtonId.CHANGE_NOTIFICATIONS_TIME_BUTTON.getId());
+        return settingsTimeButton;
+    }
+
+    private static InlineKeyboardMarkup getInclineKeyboardMarkup(User user){
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+        List<InlineKeyboardButton> row = new ArrayList<>();
+
+        InlineKeyboardButton enableButton = getEnabledButton();
+        InlineKeyboardButton settingsTimeButton = getSettingsTimeButton();
+        InlineKeyboardButton disableButton = getDisabledButton();
+
+        if(userHasNotifications(user)){
+            row.add(disableButton);
+            row = new ArrayList<>();
+            row.add(settingsTimeButton);
+        }
+        else{
+            row.add(enableButton);
+        }
+        keyboard.add(row);
+        inlineKeyboardMarkup.setKeyboard(keyboard);
+        return inlineKeyboardMarkup;
+    }
+    private static boolean userHasNotifications(User user){
+        return user.getNotificationTime() != null;
+    }
+
+    public static EditMessageText editMessage(User user, int messageId){
+        EditMessageText editMessage = new EditMessageText();
+        editMessage.setChatId(user.getChatId());
+        editMessage.setMessageId(messageId);
+
+        if(userHasNotifications(user)){
+            editMessage.setText(MessageText.DISABLED_NOTIFICATIONS_TIME_TEXT);
+        }
+        else{
+            editMessage.setText(MessageText.ENABLED_NOTIFICATIONS_TIME_TEXT);
+        }
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = getInclineKeyboardMarkup(user);
+
+        editMessage.setReplyMarkup(inlineKeyboardMarkup);
+
+        return editMessage;
+    }
+
+    public static SendMessage getInfoMessage(User user){
+        SendMessage infoMessage = new SendMessage();
+        infoMessage.setChatId(user.getChatId());
+        infoMessage.setText(MessageText.CHANGE_NOTIFICATIONS_TIME_TEXT);
+
+        return infoMessage;
+    }
+
+    public static SendMessage getResultMessage(User user){
+        SendMessage infoMessage = new SendMessage();
+        infoMessage.setChatId(user.getChatId());
+        infoMessage.setText(MessageText.ENABLED_NOTIFICATIONS_TIME_TEXT);
+
+        return infoMessage;
     }
 }
