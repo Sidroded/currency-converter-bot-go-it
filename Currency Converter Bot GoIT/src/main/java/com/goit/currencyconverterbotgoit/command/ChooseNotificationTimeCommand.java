@@ -16,17 +16,12 @@ import java.util.List;
 import java.util.Map;
 
 public class ChooseNotificationTimeCommand {
-
-
+    
     private static Map<String, Boolean> waitingNotificationMap = new HashMap<>();
 
     public static boolean isMessageInWaiting(String chatId) {
         return waitingNotificationMap.get(chatId);
     }
-
-
-
-
 
     public static SendMessage getMessage(User user){
         SendMessage message = new SendMessage();
@@ -83,30 +78,6 @@ public class ChooseNotificationTimeCommand {
         return infoMessage;
     }
 
-    /*
-    public static EditMessageText editMessage(User user, int messageId){
-        EditMessageText editMessage = new EditMessageText();
-        editMessage.setChatId(user.getChatId());
-        editMessage.setMessageId(messageId);
-
-        if(userHasNotifications(user)){
-            editMessage.setText(String.format(MessageText.ENABLED_NOTIFICATIONS_TIME_TEXT,user.getNotificationTime()));
-        }
-        else{
-            editMessage.setText(MessageText.DISABLED_NOTIFICATIONS_TIME_TEXT);
-        }
-
-        InlineKeyboardMarkup inlineKeyboardMarkup = getInclineKeyboardMarkup(user);
-
-        editMessage.setReplyMarkup(inlineKeyboardMarkup);
-
-        return editMessage;
-    }
-
-     */
-
-
-
     public static boolean isTime(String inputData){
         String regex = "^(([0,1][0-9])|(2[0-3])):[0-5][0-9]$";
         return inputData.matches(regex);
@@ -121,8 +92,6 @@ public class ChooseNotificationTimeCommand {
         user.setNotificationTime(null);
         UserService.addUser(user);
     }
-
-
 
     private static InlineKeyboardButton getEnabledButton(){
         InlineKeyboardButton enableButton = new InlineKeyboardButton();
@@ -143,8 +112,6 @@ public class ChooseNotificationTimeCommand {
         settingsTimeButton.setCallbackData(ButtonId.CHANGE_NOTIFICATIONS_TIME_BUTTON.getId());
         return settingsTimeButton;
     }
-
-
 
 
     private static InlineKeyboardMarkup getInclineKeyboardMarkup(User user){
@@ -173,8 +140,5 @@ public class ChooseNotificationTimeCommand {
     private static boolean userHasNotifications(User user){
         return user.getNotificationTime() != null;
     }
-
-
-
 
 }
