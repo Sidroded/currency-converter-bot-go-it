@@ -84,6 +84,7 @@ public class ChooseBankCommand {
         EditMessageText editMessage = new EditMessageText();
         editMessage.setChatId(user.getChatId());
         editMessage.setMessageId(messageId);
+        editMessage.setText(MessageText.CHOOSE_BANK_TEXT);
 
         InlineKeyboardMarkup keyboardMarkup = setInclineKeyboardMarkupOfBank(user);
         editMessage.setReplyMarkup(keyboardMarkup);
