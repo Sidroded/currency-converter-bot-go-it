@@ -25,6 +25,9 @@ public class ChooseNotificationTimeCommand {
     }
 
 
+    //----------------Создание и изменение сообщений ---------------------------
+
+
     public static SendMessage getMessage(User user){
         SendMessage message = new SendMessage();
         message.setChatId(user.getChatId());
@@ -43,6 +46,43 @@ public class ChooseNotificationTimeCommand {
         return message;
     }
 
+    public static SendMessage getInfoMessage(User user){
+        SendMessage infoMessage = new SendMessage();
+        infoMessage.setChatId(user.getChatId());
+        infoMessage.setText(MessageText.CHANGE_NOTIFICATIONS_TIME_TEXT);
+
+        return infoMessage;
+    }
+
+    public static SendMessage getResultMessage(User user){
+        SendMessage infoMessage = new SendMessage();
+        infoMessage.setChatId(user.getChatId());
+        infoMessage.setText(MessageText.ENABLED_NOTIFICATIONS_TIME_TEXT);
+
+        return infoMessage;
+    }
+
+    public static EditMessageText editMessage(User user, int messageId){
+        EditMessageText editMessage = new EditMessageText();
+        editMessage.setChatId(user.getChatId());
+        editMessage.setMessageId(messageId);
+
+        if(userHasNotifications(user)){
+            editMessage.setText(MessageText.DISABLED_NOTIFICATIONS_TIME_TEXT);
+        }
+        else{
+            editMessage.setText(MessageText.ENABLED_NOTIFICATIONS_TIME_TEXT);
+        }
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = getInclineKeyboardMarkup(user);
+
+        editMessage.setReplyMarkup(inlineKeyboardMarkup);
+
+        return editMessage;
+    }
+
+    //-----------------Вспомогательные методы для сборки----------------------
+
     public static boolean isTime(String inputData){
         String regex = "^(([0,1][0-9])|(2[0-3])):[0-5][0-9]$";
         return inputData.matches(regex);
@@ -57,6 +97,8 @@ public class ChooseNotificationTimeCommand {
         user.setNotificationTime(null);
         UserService.addUser(user);
     }
+
+    // ------------------Создание кнопок---------------------------------
 
     private static InlineKeyboardButton getEnabledButton(){
         InlineKeyboardButton enableButton = new InlineKeyboardButton();
@@ -77,6 +119,9 @@ public class ChooseNotificationTimeCommand {
         settingsTimeButton.setCallbackData(ButtonId.CHANGE_NOTIFICATIONS_TIME_BUTTON.getId());
         return settingsTimeButton;
     }
+
+
+    // ------------------Создание клавиатуры-----------------------------
 
     private static InlineKeyboardMarkup getInclineKeyboardMarkup(User user){
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
@@ -99,42 +144,12 @@ public class ChooseNotificationTimeCommand {
         inlineKeyboardMarkup.setKeyboard(keyboard);
         return inlineKeyboardMarkup;
     }
+    // ------------------Проверка на наличие уведомлений у юзера -----------------------------
     private static boolean userHasNotifications(User user){
         return user.getNotificationTime() != null;
     }
 
-    public static EditMessageText editMessage(User user, int messageId){
-        EditMessageText editMessage = new EditMessageText();
-        editMessage.setChatId(user.getChatId());
-        editMessage.setMessageId(messageId);
 
-        if(userHasNotifications(user)){
-            editMessage.setText(MessageText.DISABLED_NOTIFICATIONS_TIME_TEXT);
-        }
-        else{
-            editMessage.setText(MessageText.ENABLED_NOTIFICATIONS_TIME_TEXT);
-        }
 
-        InlineKeyboardMarkup inlineKeyboardMarkup = getInclineKeyboardMarkup(user);
 
-        editMessage.setReplyMarkup(inlineKeyboardMarkup);
-
-        return editMessage;
-    }
-
-    public static SendMessage getInfoMessage(User user){
-        SendMessage infoMessage = new SendMessage();
-        infoMessage.setChatId(user.getChatId());
-        infoMessage.setText(MessageText.CHANGE_NOTIFICATIONS_TIME_TEXT);
-
-        return infoMessage;
-    }
-
-    public static SendMessage getResultMessage(User user){
-        SendMessage infoMessage = new SendMessage();
-        infoMessage.setChatId(user.getChatId());
-        infoMessage.setText(MessageText.ENABLED_NOTIFICATIONS_TIME_TEXT);
-
-        return infoMessage;
-    }
 }
