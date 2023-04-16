@@ -14,8 +14,11 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 public class GetInfoCommand {
+
+    private static final Logger LOGGER = Logger.getLogger(GetInfoCommand.class.getName());
 
     public static SendMessage getMessage(User user) {
         SendMessage message = new SendMessage();
@@ -41,12 +44,16 @@ public class GetInfoCommand {
         for (BankType bankType : user.getBankTypes()) {
             List<RateResponse> rateResponses = CurrencyRateCacheHolder.getInstance().get(bankType);
 
-            for (OperationType operationType : user.getOperationTypes()) {
-                Optional<RateResponse> rateResponse = getRateResponseByOperationType(operationType, rateResponses);
-                rateResponse.ifPresent(response -> rateMessageBuilder.append(formatMessage(response, bankType, user.getCountSymbolsAfterDot()))
-                        .append("\n"));
+            if (rateResponses != null && !rateResponses.isEmpty()) {
+                for (OperationType operationType : user.getOperationTypes()) {
+                    Optional<RateResponse> rateResponse = getRateResponseByOperationType(operationType, rateResponses);
+                    rateResponse.ifPresent(response -> rateMessageBuilder.append(formatMessage(response, bankType, user.getCountSymbolsAfterDot()))
+                            .append("\n"));
+                }
+                rateMessageBuilder.append("\n");
+            } else {
+                LOGGER.warning("No currency rate data!");
             }
-            rateMessageBuilder.append("\n");
         }
         return rateMessageBuilder.toString();
     }
@@ -54,7 +61,7 @@ public class GetInfoCommand {
     private static String formatMessage(RateResponse rateResponse, BankType bankType, int countSymbolsAfterDot) {
         String format = "Курс в %s: %s/%s\n" +
                 "Купівля: %." + countSymbolsAfterDot + "f\n" +
-                "Продаж: %." + countSymbolsAfterDot + "f";
+                "Продаж: %." + countSymbolsAfterDot + "f\n";
         return String.format(
                 format,
                 bankType.getBankName(),
