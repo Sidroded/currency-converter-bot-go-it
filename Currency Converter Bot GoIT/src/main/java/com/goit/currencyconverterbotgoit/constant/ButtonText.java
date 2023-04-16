@@ -21,9 +21,7 @@ public class ButtonText {
     public static final String EUR_CURRENCY_BUTTON_TEXT = "EUR";
 
     public static final String NOTIFICATIONS_TIME_BUTTON_TEXT = "Час сповіщень";
-
     public static final String ENABLE_NOTIFICATIONS_TIME_BUTTON_TEXT = "Увімкнути сповіщення";
-
     public static String CHANGE_NOTIFICATIONS_TIME_BUTTON_TEXT = "Налаштувати час сповіщень";
     public static final String DISABLE_NOTIFICATIONS_TIME_BUTTON_TEXT = "Вимкнути сповіщення";
 
