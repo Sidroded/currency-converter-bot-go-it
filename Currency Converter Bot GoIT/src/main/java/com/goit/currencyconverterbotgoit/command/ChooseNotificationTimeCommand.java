@@ -17,15 +17,15 @@ import java.util.Map;
 
 public class ChooseNotificationTimeCommand {
 
-    //мапа із сhatId та boolean щоб відслідковувати момент що наразі ми чекаємо повідомлення
+
     private static Map<String, Boolean> waitingNotificationMap = new HashMap<>();
 
-    public static boolean getMap(String chatId) {
+    public static boolean isMessageInWaiting(String chatId) {
         return waitingNotificationMap.get(chatId);
     }
 
 
-    //----------------Создание и изменение сообщений ---------------------------
+
 
 
     public static SendMessage getMessage(User user){
@@ -56,24 +56,34 @@ public class ChooseNotificationTimeCommand {
         return infoMessage;
     }
 
-    public static SendMessage getResultMessage(User user){
+    public static SendMessage getResultEnabledNotificationMessage(User user){
         SendMessage infoMessage = new SendMessage();
         infoMessage.setChatId(user.getChatId());
-        infoMessage.setText(MessageText.ENABLED_NOTIFICATIONS_TIME_TEXT);
+        infoMessage.setText(String.format(MessageText.ENABLED_NOTIFICATIONS_TIME_TEXT,user.getNotificationTime()));
 
         waitingNotificationMap.put(user.getChatId(),false);
 
         return infoMessage;
     }
-
-    public static SendMessage getDefaultMessage(User user){
+    public static SendMessage getResultDisabledNotificationMessage(User user){
         SendMessage infoMessage = new SendMessage();
         infoMessage.setChatId(user.getChatId());
-        infoMessage.setText(MessageText.DEFAULT_NOTIFICATIONS_TIME_TEXT);
+        infoMessage.setText(MessageText.DISABLED_NOTIFICATIONS_TIME_TEXT);
+
+        changeNotificationTimeOfUserToNull(user);
 
         return infoMessage;
     }
 
+    public static SendMessage getWrongMessage(User user){
+        SendMessage infoMessage = new SendMessage();
+        infoMessage.setChatId(user.getChatId());
+        infoMessage.setText(MessageText.WRONG_TIME_TEXT);
+
+        return infoMessage;
+    }
+
+    /*
     public static EditMessageText editMessage(User user, int messageId){
         EditMessageText editMessage = new EditMessageText();
         editMessage.setChatId(user.getChatId());
@@ -93,7 +103,9 @@ public class ChooseNotificationTimeCommand {
         return editMessage;
     }
 
-    //-----------------Вспомогательные методы для сборки----------------------
+     */
+
+
 
     public static boolean isTime(String inputData){
         String regex = "^(([0,1][0-9])|(2[0-3])):[0-5][0-9]$";
@@ -110,7 +122,7 @@ public class ChooseNotificationTimeCommand {
         UserService.addUser(user);
     }
 
-    // ------------------Создание кнопок---------------------------------
+
 
     private static InlineKeyboardButton getEnabledButton(){
         InlineKeyboardButton enableButton = new InlineKeyboardButton();
@@ -133,7 +145,7 @@ public class ChooseNotificationTimeCommand {
     }
 
 
-    // ------------------Создание клавиатуры-----------------------------
+
 
     private static InlineKeyboardMarkup getInclineKeyboardMarkup(User user){
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
@@ -157,7 +169,7 @@ public class ChooseNotificationTimeCommand {
         inlineKeyboardMarkup.setKeyboard(keyboard);
         return inlineKeyboardMarkup;
     }
-    // ------------------Проверка на наличие уведомлений у юзера -----------------------------
+
     private static boolean userHasNotifications(User user){
         return user.getNotificationTime() != null;
     }
