@@ -10,7 +10,6 @@ public class User implements Serializable {
     private String lastName;
     private String chatId;
     private List<BankType> bankTypes = new ArrayList<>();
-
     private int countSymbolsAfterDot;
     private List<OperationType> operationTypes = new ArrayList<>();
     private String notificationTime;

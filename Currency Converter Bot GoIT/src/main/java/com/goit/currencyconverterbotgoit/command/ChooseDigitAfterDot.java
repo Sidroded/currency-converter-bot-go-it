@@ -28,8 +28,7 @@ public class ChooseDigitAfterDot {
     }
 
     private static Emoji getEmoji(DigitAfterDotType digitAfterDotType, User user){
-        int test =Integer.getInteger(String.valueOf(digitAfterDotType));
-        if(user.getCountSymbolsAfterDot() == test){
+        if(user.getCountSymbolsAfterDot() == digitAfterDotType.getChooseDigit()){
             return Emoji.CHECK;
         }
         else{
@@ -42,21 +41,21 @@ public class ChooseDigitAfterDot {
         List<InlineKeyboardButton> rowInLine = new ArrayList<>();
 
         var twoDigitButton = new InlineKeyboardButton();
-        twoDigitButton.setText(ButtonText.TWO_DIGITS_BUTTON_TEXT + getEmoji(DigitAfterDotType.TWO_DIGITS,user).get());
+        twoDigitButton.setText(ButtonText.TWO_DIGITS_BUTTON_TEXT + " " + getEmoji(DigitAfterDotType.TWO_DIGITS,user).get());
         twoDigitButton.setCallbackData(ButtonId.TWO_DIGITS_BUTTON.getId());
         rowInLine.add(twoDigitButton);
         keyboard.add(rowInLine);
         rowInLine = new ArrayList<>();
 
         var threeDigitButton = new InlineKeyboardButton();
-        threeDigitButton.setText(ButtonText.THREE_DIGITS_BUTTON_TEXT + getEmoji(DigitAfterDotType.THREE_DIGITS,user).get());
+        threeDigitButton.setText(ButtonText.THREE_DIGITS_BUTTON_TEXT + " "  + getEmoji(DigitAfterDotType.THREE_DIGITS,user).get());
         threeDigitButton.setCallbackData(ButtonId.THREE_DIGITS_BUTTON.getId());
         rowInLine.add(threeDigitButton);
         keyboard.add(rowInLine);
         rowInLine = new ArrayList<>();
 
         var fourDigitButton = new InlineKeyboardButton();
-        fourDigitButton.setText(ButtonText.FOUR_DIGITS_BUTTON_TEXT + getEmoji(DigitAfterDotType.FOUR_DIGITS,user).get());
+        fourDigitButton.setText(ButtonText.FOUR_DIGITS_BUTTON_TEXT + " "  + getEmoji(DigitAfterDotType.FOUR_DIGITS,user).get());
         fourDigitButton.setCallbackData(ButtonId.FOUR_DIGITS_BUTTON.getId());
         rowInLine.add(fourDigitButton);
         keyboard.add(rowInLine);
@@ -68,10 +67,9 @@ public class ChooseDigitAfterDot {
 
     public static User getEditUser(User user, DigitAfterDotType digitAfterDotType){
         int digitsOfUserModified = user.getCountSymbolsAfterDot();
-        if(digitsOfUserModified == Integer.getInteger(String.valueOf(digitAfterDotType)) && digitsOfUserModified > 1 ){
-            digitsOfUserModified = 0;
-        } else if (digitsOfUserModified != Integer.getInteger(String.valueOf(digitAfterDotType))) {
-            digitsOfUserModified = Integer.getInteger(String.valueOf(digitAfterDotType));
+
+        if (digitsOfUserModified != digitAfterDotType.getChooseDigit() ) {
+            digitsOfUserModified = digitAfterDotType.getChooseDigit();
         }
         user.setCountSymbolsAfterDot(digitsOfUserModified);
 
