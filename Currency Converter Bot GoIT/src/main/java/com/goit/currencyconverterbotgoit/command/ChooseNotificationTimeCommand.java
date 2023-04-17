@@ -6,7 +6,6 @@ import com.goit.currencyconverterbotgoit.constant.MessageText;
 import com.goit.currencyconverterbotgoit.user.User;
 import com.goit.currencyconverterbotgoit.user.UserService;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -17,7 +16,7 @@ import java.util.Map;
 
 public class ChooseNotificationTimeCommand {
     
-    private static Map<String, Boolean> waitingNotificationMap = new HashMap<>();
+    private static final Map<String, Boolean> waitingNotificationMap = new HashMap<>();
 
     public static boolean isMessageInWaiting(String chatId) {
         return waitingNotificationMap.get(chatId);
