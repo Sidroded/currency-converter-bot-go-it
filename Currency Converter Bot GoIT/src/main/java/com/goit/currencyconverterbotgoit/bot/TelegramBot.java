@@ -4,15 +4,17 @@ import com.goit.currencyconverterbotgoit.bot.botconfig.BotConfig;
 import com.goit.currencyconverterbotgoit.command.*;
 import com.goit.currencyconverterbotgoit.constant.ButtonId;
 import com.goit.currencyconverterbotgoit.user.*;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import javax.crypto.spec.OAEPParameterSpec;
+import java.time.LocalTime;
 
 @Component
+@EnableScheduling
 public class TelegramBot extends TelegramLongPollingBot {
     final BotConfig config;
     public TelegramBot(BotConfig config){
@@ -154,7 +156,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         User editUser = ChooseOperationTypeCommand.getEditUser(user, operationType);
 
         try {
-            execute(ChooseOperationTypeCommand.getEditMessage(user, messageId));
+            execute(ChooseOperationTypeCommand.getEditMessage(editUser, messageId));
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
@@ -200,14 +202,17 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void sendMessage(String chatId, String text){
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText(text);
+    @Scheduled(fixedRate = 60000)
+    public void sendInfoToUsers() {
+        LocalTime now = LocalTime.now();
 
-        try{
-            execute(message);
+        for (User user : UserService.getUsers().values()) {
+            if (user.getNotificationTime() != null) {
+                LocalTime time = LocalTime.parse(user.getNotificationTime());
+                if (time.getHour() == now.getHour() && time.getMinute() == now.getMinute()) {
+                    getInfoCommandReceived(user);
+                }
+            }
         }
-        catch(TelegramApiException ignored){}
     }
 }
