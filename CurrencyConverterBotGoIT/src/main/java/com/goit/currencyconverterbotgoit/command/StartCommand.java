@@ -18,7 +18,7 @@ public class StartCommand {
     public static SendMessage getMessage(User user) {
         SendMessage message = new SendMessage();
         message.setChatId(user.getChatId());
-        message.setText(String.format(MessageText.START_TEXT, user.getUserName()));
+        message.setText(String.format("Ласкаво просимо %s. Цей бот допоможе відслідковувати актуальні курси валют", user.getUserName()));
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
         List<InlineKeyboardButton> rowInLine = new ArrayList<>();

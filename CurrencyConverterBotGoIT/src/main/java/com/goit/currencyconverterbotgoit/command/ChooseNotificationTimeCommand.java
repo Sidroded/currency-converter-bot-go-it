@@ -27,7 +27,7 @@ public class ChooseNotificationTimeCommand {
         message.setChatId(user.getChatId());
 
         if(userHasNotifications(user)){
-            message.setText(String.format(MessageText.ENABLED_NOTIFICATIONS_TIME_TEXT,user.getNotificationTime()));
+            message.setText(String.format("Сповіщення встановлено на %s", user.getNotificationTime()));
         }
         else{
             message.setText(MessageText.DISABLED_NOTIFICATIONS_TIME_TEXT);
@@ -53,7 +53,7 @@ public class ChooseNotificationTimeCommand {
     public static SendMessage getResultEnabledNotificationMessage(User user){
         SendMessage infoMessage = new SendMessage();
         infoMessage.setChatId(user.getChatId());
-        infoMessage.setText(String.format(MessageText.ENABLED_NOTIFICATIONS_TIME_TEXT,user.getNotificationTime()));
+        infoMessage.setText(String.format("Сповіщення встановлено на %s", user.getNotificationTime()));
 
         waitingNotificationMap.put(user.getChatId(),false);
 
