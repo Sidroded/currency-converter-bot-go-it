@@ -39,19 +39,6 @@ public class StartCommand {
         rowInLine.add(settingsButton);
         rowsInLine.add(rowInLine);
 
-        //-------------------TEST-BUTTON--------------------//
-
-        rowInLine = new ArrayList<>();
-
-        var testButton = new InlineKeyboardButton();
-        testButton.setText(ButtonText.TEST_BUTTON_TEXT);
-        testButton.setCallbackData(ButtonId.TEST_BUTTON.getId());
-
-        rowInLine.add(testButton);
-        rowsInLine.add(rowInLine);
-
-        //-------------------TEST-BUTTON--------------------//
-
         inlineKeyboardMarkup.setKeyboard(rowsInLine);
         message.setReplyMarkup(inlineKeyboardMarkup);
 
