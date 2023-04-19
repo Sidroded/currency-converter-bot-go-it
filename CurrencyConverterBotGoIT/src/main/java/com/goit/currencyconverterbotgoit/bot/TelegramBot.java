@@ -3,6 +3,7 @@ package com.goit.currencyconverterbotgoit.bot;
 import com.goit.currencyconverterbotgoit.bot.botconfig.BotConfig;
 import com.goit.currencyconverterbotgoit.command.*;
 import com.goit.currencyconverterbotgoit.constant.ButtonId;
+import com.goit.currencyconverterbotgoit.constant.ButtonText;
 import com.goit.currencyconverterbotgoit.user.*;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -41,6 +42,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             switch (messageText) {
                 case "/start" -> startCommandReceived(chatId, userName);
+                case ButtonText.GET_INFO_BUTTON_TEXT -> getInfoCommandReceived(user);
+                case ButtonText.SETTINGS_BUTTON_TEXT -> settingsCommandReceived(user);
 
                 default -> {
                     if (ChooseNotificationTimeCommand.isMessageInWaiting(chatId) && ChooseNotificationTimeCommand.isTime(messageText)) {
